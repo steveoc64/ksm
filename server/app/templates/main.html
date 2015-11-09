@@ -1,0 +1,22 @@
+<ion-view title="Main" hide-nav-bar="false">
+<ion-tabs class="tabs-icon-top tabs-dark" delegate-handle="main">
+	<ion-tab icon-on="ion-ios-reverse-camera" icon-off="ion-ios-reverse-camera-outline" title="Games" ui-sref="main.games">
+		<ion-nav-view name="main-games"></ion-nav-view>
+	</ion-tab>
+	<ion-tab icon-on="ion-ios-world" icon-off="ion-ios-world-outline" title="Scenarios" ui-sref="main.scenarios">
+		<ion-nav-view name="main-scenarios"></ion-nav-view>
+	</ion-tab>
+	<ion-tab icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline" title="Settings" ui-sref="main.settings">
+		<ion-nav-view name="main-settings"></ion-nav-view>
+	</ion-tab>
+	<ion-tab icon-on="ion-ios-paper" icon-off="ion-ios-paper-outline" title="Manuals" ui-sref="main.manuals">
+		<ion-nav-view name="main-manuals"></ion-nav-view>
+	</ion-tab>
+	<ion-tab icon-on="ion-ios-close" icon-off="ion-ios-close-outline" title="Logout" ui-sref="main.logout">
+		<ion-nav-view name="main-logout"></ion-nav-view>
+	</ion-tab>
+	<ion-tab ui-sref="map">
+		<ion-nav-view name="map"></ion-nav-view>
+	</ion-tab>
+</ion-tabs>
+</ion-view>

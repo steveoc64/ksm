@@ -1,0 +1,133 @@
+<h2>Thanks for registering with NextGenMiniatures online Kriegspiel server !!</h2>
+<p>
+<center><img src=http://nextgenminiatures.com/ksmailimg/ksheader.jpg>
+	<br><small>A game for the discerning professional.</small>
+</center>
+<p>
+
+<h4>What is this all about then ?</h4>
+
+This is a free account that allows you to get started playing computer moderated wargames campaigns
+either solo, or with a group of like minded friends.
+
+<p>
+
+Before you can play though, we need to validate your email address, which you can do by clicking this link below :<p>
+<a href={{.Server}}/validate/{{.ValidationKey}}>{{.Server}}/validate/{{.ValidationKey}}</a>
+
+<p>
+<h4>Tell me more ?</h4>
+
+The purpose of the system is to allow a group of players to re-enact major campaigns of the horse and musket
+era, performing all of the grand strategic moves whilst online (eg- from home or work !!), setting up a number of
+detailed tabletop actions for the weekends.
+
+<p>
+
+As opposing Division and Corps sized forces contact each other on the campaign map, the Kriegspiel Server determines what happens
+based on a number of factors and the orders assigned to each unit. This includes all the boring bits such as the initial scouting
+contacts, deployments, probing attacks, defensive preparations, minor losses due to attrition, etc.  
+
+<p>
+
+Information is conveyed back to YOU the commander. The players decide where to make a stand, when to launch a big push, and whether 
+or not to draw their opponents into a trap.
+
+<p>
+<center><img src=http://nextgenminiatures.com/ksmailimg/ksmap.jpg>
+	<br><small>Operational planning and execution of orders<br>Do it all online, at home or work.</small>
+</center>
+
+<p>
+
+When the players decide to give battle, then play is transferred to the tabletop with traditional miniatures for the grand tactical
+level battle.  This is a miniatures battle like no other though - as the Kriegspiel Server acts as an impartial umpire for the 
+tabletop action, as well as doing all the tedious bookkeeping for the game itself.  
+
+<p>
+
+<h4>How do the Tabletop games play out ?</h4>
+
+Combat resolution rules are based upon the original Kriegspiel system developed by professional officers in the Prussian army 
+(ie - Original Reisswitz system of 1824 + the revised 1828 additions). This is a game of command and tactics, with a sound scientific and
+practical basis backed with plenty of real world experience by the same people that fought in the actual battles of the period.
+
+<p>
+
+In other words .... the 1828 Kriegspiel rules are not a bad
+starting point at all, and hard to argue with the logic behind them given their fine credentials.
+
+<p>
+
+The Tabletop Action is intended to tick all the right boxes :
+<ul>
+	<li> Real Fog of War and hidden movement.
+	<li> BIG Tables, BIG armies, lots of miniatures fighting it out on beautiful terrain boards.
+	<li> PAIN FREE adaption of figure scales, basing and ground scales between games.
+	<li> REALISTIC Command and Control system.
+	<li> DETAILED  Drill, Formations, Skirmishing, Morale, Fatigue, Ammunition, Smoke, Unit Cohesion, Leadership, Wounds and Deaths down to the per-soldier level.
+	<li> FAST Action - 2-3 hours of fast and furious tabletop action to reach a definitive conclusion for a BIG game.
+	<li> ALL Players get to play - no need for a designated umpire, as the server does all the boring stuff.  
+	<li> IMPARTIAL - An umpire that is always consistent in applying the rules, and cannot be convinced to do otherwise.
+	<li> SCALABLE - The game is fully multi user, so gameplay does not melt down when more units are added to the battle.
+</ul>
+
+<center>
+	<img src=http://nextgenminiatures.com/ksmailimg/kstable.jpg>
+	<br><small>Real Miniatures on Real Tabletops</small>
+</center>
+
+<p>
+
+At the end of each Tabletop Action, the server can generate a simple AAR for you - complete with a timeline of maps showing
+major developments and decisive moments in the course of the Grand Tactical Battle. You can post this AAR straight to your gaming blog, or 
+share it with friends via email or social media.
+
+
+<h4>And its all FREE ?</h4>
+
+YES.
+<p>
+
+This FREE account provides enough to keep you gaming for years, including :
+<ul>
+	<li> Create up to 3 full blown campaign scenarios, with detailed maps and orders of battle.
+	<li> Host 1 campaign game at a time, with up to 4 players per game.
+	<li> Host 1 tabletop action at a time, with up to 4 players per game.
+	<li> Play solo against 1 computer controlled AI opponent.
+</ul>
+
+<p>
+
+<h4>Whats not FREE then ?</h4>
+
+Well, in order to make this all worth doing (and to pay the hosting bills), I will be adding some non-free additions in the near future, 
+in the form of in-game purchases and credits.  Buying them is entirely optional. Not buying them will not affect your ability to 
+keep playing and enjoying the game.  
+
+<p>
+
+One thing I wont be adding, is in-game purchases that give players some advantage over other players. That is a great way
+to wreck a good game !  
+
+<p>
+
+Example future in-game purchase options :
+<ul>
+	<li> Purchase ready made campaigns that you can add to your account.
+	<li> Accurate historical OOB's you can load into your campaigns.
+	<li> Define your own custom unit types, weapon stats, etc.
+	<li> Credits to host additional campaigns, tabletop games, or add extra players to a game.
+	<li> Add additional periods to the system  (1870, ACW, Colonial, WW1, etc.)
+	<li> Turn on additional layers for a campaign (Diplomacy, Finance, Resource Management, Unit XP, etc)
+	<li> Play against a more advanced AI opponent.
+</ul>
+
+<p>
+So, if that all sounds fine to you, Please click the validation link at the top of this email and start using 
+the Kriegspiel server straight away.
+<p>
+
+Thanks,<br>
+<i><b>Steve OC</b></i><br>
+CEO, NextGenMiniatures

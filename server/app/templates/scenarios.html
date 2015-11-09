@@ -1,0 +1,32 @@
+<ion-view title="Scenarios List">
+	<ion-nav-title>Scenarios List for {{login.username}}</ion-nav-title>
+	<ion-content>
+		<div class="row">
+			<div class="card col">
+				<ion-item class="item-icon-left item-avatar" ng-click="newMap()">
+					<i class="icon ion-ios7-world balanced"></i> Create New Scenario
+				</ion-item>			
+			</div>
+		</div>
+		<div class="row gallery">
+			<div class="card secnarioImage"  ng-repeat="slot in slots.slots">
+			    <ion-item class="item item-icon-left bar bar-dark">
+					<b>{{slot.Name}}</b>
+			    </ion-item>
+			    <ion-item class="item-image" ng-click="loadFromSlot(slot.Slot)">
+				    <img ng-src="battles/{{slot.Image}}.jpg">
+			    </ion-item>
+			    <ion-item>
+			      {{lookup.describePeriod(slot.Period)}}
+			    </ion-item>
+			    <ion-item>
+			      <ion-list>
+			      	<ion-item class="item-thumbnail-top" ng-repeat="(key,player) in slot.Players">
+			      	{{key}} - {{player.Corps}} Corps
+			      	</ion-item>
+			      </ion-list>
+			    </ion-item>
+			</div>
+		</div>					
+	</ion-content>
+</ion-view>

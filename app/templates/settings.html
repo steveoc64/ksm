@@ -1,0 +1,51 @@
+<ion-view title="Account Settings">
+	<ion-content>
+		<ion-list>
+			<ion-item class="item-divider">
+			  <h1>Your Account Details</h1>
+			</ion-item>
+			<ion-item class="item-input">
+			  <span class="input-label">Username</span>
+			  <input type="text" ng-model="user.username">
+			</ion-item>
+			<ion-item class="item-input">
+			  <span class="input-label">Email</span>
+			  <span>{{user.email}}</span>
+			</ion-item>
+			<ion-item class="item-input">
+			  <span class="input-label">Password</span>
+			  <input type="password" ng-model="user.password">
+			</ion-item>
+			<ion-item class="item-divider">
+			  Where abouts are you ?
+			</ion-item>
+			<ion-item class="item-input">
+			  <span class="input-label">Location</span>
+			  <input type="text" ng-model="user.location">
+			</ion-item>
+			<ion-item class="item-divider">
+			  Tell us about your model collection ...
+			</ion-item>
+			<ion-item class="item-input">
+			  <span class="input-label">What Armies</span>
+			  <input type="text" ng-model="user.armies">
+			</ion-item>
+			<ion-item class="item-input">
+			  <span class="input-label">Scales ?</span>
+			  <input type="text" ng-model="user.scale">
+			</ion-item>
+			<ion-item class="item-divider">
+			  When do you get to game ?
+			</ion-item>
+			<ion-item class="item-input">
+			  <span class="input-label">Game Time</span>
+			  <input type="text" ng-model="user.gametime">
+			</ion-item>
+		</ion-list>
+
+		<div class="padding">
+		  <button class="button button-block button-positive" ng-click="updateUser(user)">Update Details</button>
+		</div>
+
+	</ion-content>
+</ion-view>

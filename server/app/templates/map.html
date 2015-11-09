@@ -1,0 +1,789 @@
+<ion-view ng-cloak>
+<style type="text/css">
+    .mapcontrols {
+        z-index: 100;
+        position: absolute;
+        bottom: 7em;
+        left: .5em;
+        background: white;
+        padding: 0em 0em;
+        opacity: .95;
+        border-radius: 10px;
+        box-shadow: 5px 5px 3px #888888;
+        width: 33%;    
+        max-width: 20em;
+    }
+    .unitpanel {
+        z-index: 101;
+        position: absolute;
+        top: .5em;
+        left: .5em;
+        background: white;
+        padding: 0em 0em;
+        opacity: .95;
+        border-radius: 10px;
+        box-shadow: 5px 5px 3px #888888;
+        width: 33%;     
+        max-width: 20em;
+    }
+    .unitcardHQ {
+      width: 100%;
+      min-width: 20em;
+    }
+    .unitcardCorps {
+      max-width: 25em;
+      min-width: 15em;
+    }
+    .unitcard {
+      max-width: 15em;
+      min-width: 12em;
+    }
+    .imagepanel {
+        z-index: 101;
+        position: absolute;
+        top: 0em;
+        left: 21em;
+        background: white;
+        padding: 0em 0em;
+        opacity: 1;
+        border-radius: 10px;
+        box-shadow: 5px 5px 3px #888888;
+        width: 33%;     
+        max-width: 20em;      
+    }
+    .unittypepanel {
+        z-index: 101;
+        position: absolute;
+        top: 0em;
+        right: 5em;
+        background: white;
+        padding: 0em 0em;
+        opacity: 1;
+        border-radius: 10px;
+        box-shadow: 5px 5px 3px #888888;
+        width: 25%;     
+        max-width: 50em;      
+        min-width: 20em;
+    }
+    .slots {
+        max-height: 200px;
+        overflow: auto;
+    }
+    .loader {
+      width: 240px;
+      height: 240px;
+      overflow: none;
+      margin: auto;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+    }    
+    .map-spinner {
+      width: 240px;
+      height: 240px;
+      stroke: #444;
+      fill: #444;
+    }    
+    .unitcontrols {
+        z-index: 100;
+        position: absolute;
+        bottom: 4em;
+        right: .5em;
+        background: white;
+        padding: 0em 0em;
+        opacity: .95;
+        border-radius: 10px;
+        box-shadow: 5px 5px 3px #888888;
+    }
+    .fullscreen {
+      width: 100%;
+      height: 100%;
+    }
+    div.angular-leaflet-map {
+      width: 100%;
+      height: 100%;
+    }
+}
+</style>
+
+<div class="mapcontrols" ng-if="isLoaded">
+
+  <ion-list>
+    <ion-item class="item-icon-right" ng-show="!showMapControls()" ng-click="controlsMainMenu()">
+      Scenario Details
+      <i class="icon ion-ios-arrow-up"></i>
+    </ion-item>
+
+    <ion-item class="item-icon-right bar bar-dark" ng-show="showMapControls()" ng-click="controlsCloseMainMenu()">
+      <b>Scenario</b>
+      <i class="icon ion-ios-arrow-down"></i>
+    </ion-item>
+    <ion-item ng-show="showMapControls()" ng-click="selectImage()">
+      <img ng-src="battles/{{file.image}}.jpg" width="100%">
+    </ion-item>
+    <ion-item class="item-input" ng-show="showMapControls()">
+      <input type="text" placeholder="Map Name" ng-model="file.name">
+    </ion-item>
+    <ion-item ng-show="showMapControls()">
+      {{lookup.describePeriod(file.period)}}
+    <!--
+      <select ng-model="file.period" ng-options="key as value.name+' .....  '+value.from+' - '+value.to for (key,value) in lookup.period | orderObjectBy:'sortKey'">        
+      </select>
+      -->
+    </ion-item>
+    <ion-item class="item-input" ng-show="showMapControls()">
+      <input type="text" placeholder="Year" ng-model="file.year">
+    </ion-item>
+    <ion-item ng-show="showMapControls()">
+      <img ng-src="{{seasonImage(file.season)}}"> {{file.season}}
+    </ion-item>
+
+    <ion-item ng-show="showFileControls() && usingSlot" class="item-icon-left" ng-click="duplicate()">
+      <i class="icon ion-ios-copy-outline"></i>Make a Copy
+    </ion-item>
+    <ion-item ng-show="showFileControls() && usingSlot > 0" class="item-icon-left" ng-click="quitEditor(true)">
+      <i class="icon ion-close-circled assertive"></i> Delete
+    </ion-item>
+    <ion-item ng-show="showFileControls() && usingSlot == 0" class="item-icon-left" ng-click="quitEditor(false)">
+      <i class="icon ion-close-circled assertive"></i> Cancel
+    </ion-item>
+
+  </ion-list>
+</div>
+
+<div class="unitpanel" ng-if="showUnit && isLoaded">
+
+<!-- HQ -->
+  <ion-list ng-show="unit.lvl == 'HQ'"> 
+    <ion-item class="item item-icon-right {{barClass()}}" ng-click="closeUnitPopup()">
+      <b>HQ / Player</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-item class="item-icon-left" ng-click="toggleUnitZoom(unit)">
+      <i ng-class="getToggleIcon()" class="icon positive"></i> {{getToggleDesc(unit)}}
+    </ion-item>
+
+
+    <ion-item class="item-input">
+      <input type="text" placeholder="Player Name" ng-model="unit.label.message">
+    </ion-item>
+    <ion-item class="item-thumbnail" ng-click="changeFlag(unit)">
+      <img ng-src="flags/{{lookup.getFlag(unit.nation)}}.jpg">
+      {{unit.nation}}
+    </ion-item>
+
+    <ion-item class="item-icon-left" ng-click="deleteUnit(unit)">
+      <i class="icon ion-ios-close assertive"></i> Delete
+    </ion-item>
+  </ion-list>
+
+<!-- Corps -->
+  <ion-list ng-show="unit.lvl == 'Corps'">
+    <ion-item class="item item-icon-right {{barClass()}}" ng-click="closeUnitPopup()">
+      <b>Corps</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-item class="item-icon-left" ng-click="toggleUnitZoom(unit)">
+      <i ng-class="getToggleIcon()" class="icon positive"></i> {{getToggleDesc(unit)}}
+    </ion-item>
+
+    <ion-item class="item-input">
+      <input type="text" placeholder="Unit Name" ng-model="unit.label.message">
+    </ion-item>
+    <ion-item class="item-thumbnail" ng-click="changeFlag(unit)">
+      <img ng-src="flags/{{lookup.getFlag(unit.nation)}}.jpg">
+      {{unit.nation}}
+    </ion-item>
+
+    <ion-item class="item-input range range-positive">
+      <i class="icon ion-ios-star-outline"></i>
+      <input type="range" name="skill" ng-model="unit.skill" min="1" max="11" value="5">
+      <i class="icon ion-ios-star"></i>
+    </ion-item>
+    <ion-item ng-click="data.showUnitHeader = !data.showUnitHeader">
+      {{getRatingDesc(unit.skill)}}
+    </ion-item>
+
+    <ion-item ng-if="data.showUnitHeader">
+      <ion-item class="item-input range range-positive">
+        <i class="icon ion-ios-bolt-outline"></i>
+        <input type="range" name="vigour" ng-model="unit.vigour" min="0" max="100" value="50">
+        <i class="icon ion-ios-bolt"></i>
+      </ion-item>
+      <ion-item class="item-input range range-positive">
+        <i class="icon ion-ios-lightbulb-outline"></i>
+        <input type="range" name="initiative" ng-model="unit.initiative" min="0" max="100" value="50">
+        <i class="icon ion-ios-lightbulb"></i>
+      </ion-item>
+      <ion-item class="item-input range range-positive">
+        <i class="icon ion-ios-paper-outline"></i>
+        <input type="range" name="logistics" ng-model="unit.logistics" min="0" max="100" value="50">
+        <i class="icon ion-ios-paper"></i>
+      </ion-item>
+    </ion-item>
+
+    <ion-item>
+      <i class="icon ion-flag"> {{unit.parentDistance}}</i>
+      <br>
+      <i class="icon ion-clock"> {{unit.courierTime}}</i>
+    </ion-item>
+
+    <ion-item class="item-icon-left" ng-click="deleteUnit(unit)">
+      <i class="icon ion-ios-close assertive"></i> Delete
+    </ion-item>
+  </ion-list>
+
+<!-- Div -->
+  <ion-list ng-show="unit.lvl == 'Div'">
+    <ion-item class="item item-icon-right {{barClass()}}" ng-click="closeUnitPopup()">
+      <b>Division</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-item class="item-icon-left" ng-click="toggleUnitZoom(unit)">
+      <i ng-class="getToggleIcon()" class="icon positive"></i> {{getToggleDesc(unit)}}
+    </ion-item>
+
+    <ion-item class="item-input">
+      <input type="text" placeholder="Unit Name" ng-model="unit.label.message">
+    </ion-item>
+    <ion-item class="item-thumbnail" ng-click="changeFlag(unit)">
+      <img ng-src="flags/{{lookup.getFlag(unit.nation)}}.jpg">
+      {{unit.nation}}
+    </ion-item>
+
+    <ion-item class="item-input range range-positive">
+      <i class="icon ion-ios-star-outline"></i>
+      <input type="range" name="skill" ng-model="unit.skill" min="1" max="11" value="5">
+      <i class="icon ion-ios-star"></i>
+    </ion-item>
+    <ion-item>
+      {{getRatingDesc(unit.skill)}}
+    </ion-item>
+
+    <ion-item class="item-input range range-positive">
+      <i class="icon ion-ios-bolt-outline"></i>
+      <input type="range" name="vigour" ng-model="unit.vigour" min="0" max="100" value="50">
+      <i class="icon ion-ios-bolt"></i>
+    </ion-item>
+
+    <ion-item>
+      <i class="icon ion-flag"> {{unit.parentDistance}}</i>
+      <br>
+      <i class="icon ion-clock"> {{unit.courierTime}}</i>
+    </ion-item>
+
+    <ion-item class="item-icon-left" ng-click="deleteUnit(unit)">
+      <i class="icon ion-ios-close assertive"></i> Delete
+    </ion-item>
+  </ion-list>
+
+<!-- Bde -->
+  <ion-list ng-show="unit.lvl == 'Bde'">
+    <ion-item class="item item-icon-right {{barClass()}}" ng-click="closeUnitPopup()">
+      <b>Brigade</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-item class="item-icon-left" ng-click="toggleUnitZoom(unit)">
+      <i ng-class="getToggleIcon()" class="icon positive"></i> {{getToggleDesc(unit)}}
+    </ion-item>
+
+    <ion-item class="item-input">
+      <input type="text" placeholder="Unit Name" ng-model="unit.label.message">
+    </ion-item>
+    <ion-item class="item-thumbnail" ng-click="changeFlag(unit)">
+      <img ng-src="flags/{{lookup.getFlag(unit.nation)}}.jpg">
+      {{unit.nation}}
+    </ion-item>
+
+    <ion-item class="item-input range range-positive">
+      <i class="icon ion-ios-star-outline"></i>
+      <input type="range" name="skill" ng-model="unit.skill" min="1" max="11" value="5">
+      <i class="icon ion-ios-star"></i>
+    </ion-item>
+    <ion-item>
+      {{getRatingDesc(unit.skill)}}
+    </ion-item>
+
+    <ion-item class="item-input range range-positive">
+      <i class="icon ion-ios-bolt-outline"></i>
+      <input type="range" name="vigour" ng-model="unit.vigour" min="0" max="100" value="50">
+      <i class="icon ion-ios-bolt"></i>
+    </ion-item>
+
+    <ion-item>
+      <i class="icon ion-flag"> {{unit.parentDistance}}</i>
+      <br>
+      <i class="icon ion-clock"> {{unit.courierTime}}</i>
+    </ion-item>
+
+    <ion-item class="item-icon-left" ng-click="deleteUnit(unit)">
+      <i class="icon ion-ios-close assertive"></i> Delete
+    </ion-item>
+  </ion-list>
+
+<!-- Gun -->
+  <ion-list ng-show="unit.lvl == 'Gun'">
+    <ion-item class="item item-icon-right {{barClass()}}" ng-click="closeUnitPopup()">
+      <b>Battery</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-item class="item-icon-left" ng-click="toggleUnitZoom(unit)">
+      <i ng-class="getToggleIcon()" class="icon positive"></i> {{getToggleDesc(unit)}}
+    </ion-item>
+
+    <ion-item class="item-input">
+      <input type="text" placeholder="Unit Name" ng-model="unit.label.message">
+    </ion-item>
+
+    <ion-item class="item-thumbnail" ng-click="changeFlag(unit)">
+      <img ng-src="flags/{{lookup.getFlag(unit.nation)}}.jpg">
+      {{unit.nation}}
+    </ion-item>
+
+    <ion-item class="item-input range range-positive">
+      <i class="icon ion-ios-star-outline"></i>
+      <input type="range" name="skill" ng-model="unit.skill" min="1" max="11" value="5">
+      <i class="icon ion-ios-star"></i>
+    </ion-item>
+
+    <ion-item>
+      {{getRatingDesc(unit.skill)}}
+    </ion-item>
+
+    <ion-item class="item-input range range-positive">
+      <i class="icon ion-ios-paper-outline"></i>
+      <input type="range" name="logistics" ng-model="unit.logistics" min="0" max="100" value="50">
+      <i class="icon ion-ios-paper"></i>
+    </ion-item>
+
+    <ion-item>
+      <i class="icon ion-flag"> {{unit.parentDistance}}</i>
+      <br>
+      <i class="icon ion-clock"> {{unit.courierTime}}</i>
+    </ion-item>
+
+    <ion-item class="item-icon-left" ng-click="deleteUnit(unit)">
+      <i class="icon ion-ios-close assertive"></i> Delete
+    </ion-item>
+  </ion-list>
+
+<!-- Cav -->
+  <ion-list ng-show="unit.lvl == 'Cav'">
+    <ion-item class="item item-icon-right {{barClass()}}" ng-click="closeUnitPopup()">
+      <b>Cavalry Bde</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-item class="item-icon-left" ng-click="toggleUnitZoom(unit)">
+      <i ng-class="getToggleIcon()" class="icon positive"></i> {{getToggleDesc(unit)}}
+    </ion-item>
+
+    <ion-item class="item-input">
+      <input type="text" placeholder="Unit Name" ng-model="unit.label.message">
+    </ion-item>
+
+    <ion-item class="item-thumbnail" ng-click="changeFlag(unit)">
+      <img ng-src="flags/{{lookup.getFlag(unit.nation)}}.jpg">
+      {{unit.nation}}
+    </ion-item>
+
+    <ion-item class="item-input range range-positive">
+      <i class="icon ion-ios-star-outline"></i>
+      <input type="range" name="skill" ng-model="unit.skill" min="1" max="11" value="5">
+      <i class="icon ion-ios-star"></i>
+    </ion-item>
+    <ion-item>
+      {{getRatingDesc(unit.skill)}}
+    </ion-item>
+
+    <ion-item class="item-input range range-positive">
+      <i class="icon ion-ios-lightbulb-outline"></i>
+      <input type="range" name="initiative" ng-model="unit.initiative" min="0" max="100" value="50">
+      <i class="icon ion-ios-lightbulb"></i>
+    </ion-item>
+
+    <ion-item>
+      <i class="icon ion-flag"> {{unit.parentDistance}}</i>
+      <br>
+      <i class="icon ion-clock"> {{unit.courierTime}}</i>
+    </ion-item>
+
+    <ion-item class="item-icon-left" ng-click="deleteUnit(unit)">
+      <i class="icon ion-ios-close assertive"></i> Delete
+    </ion-item>
+  </ion-list>
+</div>
+
+<div class="unitpanel" ng-if="showObjectiveDetails">
+  <ion-list>
+    <ion-item class="item-icon-right" ng-click="closeObjectivePopup()">
+      <h1>Objective</h1>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+
+    <ion-item class="item-input">
+      <input type="text" placeholder="Name" ng-model="objective.name">
+    </ion-item>
+    <ion-item class="item-radio">
+      <ion-radio ng-model="objective.color" class="energized" value="GoldObjective" ng-change="colorChange(objective)">WayPoint</ion-radio>
+      <ion-radio ng-model="objective.color" class="positive" value="BlueObjective" ng-change="colorChange(objective)">Important</ion-radio>
+      <ion-radio ng-model="objective.color" class="assertive" value="RedObjective" ng-change="colorChange(objective)">Critical</ion-radio>
+    </ion-item>
+    <ion-item class="item-icon-left" ng-click="disconnectObjective(objective)">
+      <i class="icon ion-scissors"></i> Disconnect
+    </ion-item>
+    <ion-item class="item-icon-left" ng-click="deleteObjective(objective)">
+      <i class="icon ion-ios-close assertive"></i> Delete
+    </ion-item>
+  </ion-list>
+</div>
+
+<div class="list unitcontrols" ng-if="showObjectives()">
+  <a class="item item-icon-left" ng-click="topLevelControls()">
+    <i class="icon ion-ios-arrow-back"></i>
+  </a>
+  <a class="item item-avatar avatar item-icon-left" ng-click="objMode('New','GoldObjective')">
+    <img ng-src="icons/goldObjective.png">
+  </a>       
+  <a class="item item-avatar avatar item-icon-left" ng-click="objMode('New','BlueObjective')">
+    <img ng-src="icons/blueObjective.png">
+  </a>       
+  <a class="item item-avatar avatar item-icon-left" ng-click="objMode('New','RedObjective')">
+    <img ng-src="icons/redObjective.png">
+  </a>       
+  <a class="item item-icon-right" ng-click="objMode('Connect')">
+    Connect
+    <i class="icon ion-arrow-resize"></i>
+  </a>       
+</div>
+
+
+<div class="list unitcontrols" ng-if="showToplevelControls() && mappingMode && isLoaded">
+  <a class="item item-icon-left" ng-click="objectiveMenu()">
+    <i class="icon ion-ios-star-outline"></i><small>Objective</small>
+  </a>
+  <a class="item item-icon-left" ng-click="unitControls(army.name)" ng-repeat="army in armies"> 
+    <i class="icon ion-ios-flag" ng-if="army.name != 'White'" ng-class="army.class"></i>
+    <i class="icon ion-ios-flag-outline" ng-if="army.name == 'White'"></i>{{army.name}}
+  </a>  
+</div>
+
+<div class="list unitcontrols" ng-if="showSubunits() && isLoaded">
+  <a class="item item-icon-left" ng-click="topLevelControls()">
+    <i class="icon ion-ios-arrow-back"></i>
+  </a>
+  <a class="item item-thumnail item-icon-left" ng-show="!zoomed" ng-click="selectUnit('HQ')">
+    <img ng-src="icons/{{color}}HQ.png">HQ
+  </a>       
+  <a class="item item-thumbnail item-icon-left" ng-show="!zoomed" ng-click="selectUnit('Corps')">
+    <img ng-src="icons/{{color}}Corps.png">Corps
+  </a>       
+  <a class="item item-thumbnail item-icon-left" ng-show="zoomed" ng-click="selectUnit('Div')">
+    <img ng-src="icons/{{color}}Div.png">Div
+  </a>       
+  <a class="item item-thumbnail item-icon-left" ng-show="zoomed" ng-click="selectUnit('Bde')">
+    <img ng-src="icons/{{color}}Bde.png">Bde
+  </a>       
+  <a class="item item-thumbnail item-icon-left" ng-show="zoomed" ng-click="selectUnit('Gun')">
+    <img ng-src="icons/{{color}}Gun.png">Bty
+  </a>       
+  <a class="item item-thumbnail item-icon-left" ng-show="zoomed" ng-click="selectUnit('Cav')">
+    <img ng-src="icons/{{color}}Cav.png">Cav
+  </a>       
+</div>
+
+<div class="imagepanel" ng-if="showImageSelect && isLoaded">
+  <ion-list>
+    <ion-item class="item-icon-right bar bar-dark" ng-click="closeSelectImage()">
+      <b>Select an Image</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-content class="list" scroll="true" ng-show="showImageSelect">
+      <ion-item ng-repeat="scene in battleScenes">
+        <img ng-src="battles/{{scene}}.jpg" ng-click="imageSelected($index)">
+      </ion-item>
+    </ion-content>
+  </ion-list>
+</div>
+
+<div class="unittypepanel" ng-if="showInfPanel && !isLoaded">
+  <ion-list>
+    <ion-item class="item-icon-right bar bar-dark" ng-click="closeUnitTypePanel()">
+      <b>Select Infantry Type</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-content class="list" scroll="true">
+      <ion-item ng-repeat="inftype in allowedUnitTypes" ng-class="infChooserClass($index)">
+        <img ng-src="{{getInfantryImage(inftype)}}"  ng-click="unitAttrSelected(inftype)">
+        <h2>{{lookup.inf[inftype].name}} - {{lookup.inf[inftype].desc}}</h2>
+        <div>{{getInfantryBases(inftype)}}</div>
+        <div ng-if="lookup.inf[inftype].bases[3] > 0">3rd Rank can Skirmish</div>
+        <div ng-if="lookup.inf[inftype].rifle > 0">Rifle Armed</div>
+        <div ng-if="lookup.inf[inftype].shock > 0">Shock Troops</div>
+      </ion-item>
+    </ion-content>
+  </ion-list>
+</div>
+<div class="unittypepanel" ng-if="showCavPanel && !isLoaded">
+  <ion-list>
+    <ion-item class="item-icon-right bar bar-dark" ng-click="closeUnitTypePanel()">
+      <b>Select Cavalry Type</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-content class="list" scroll="true">
+      <ion-item ng-repeat="(key,cavtype) in lookup.cav" ng-class="getChooserClass(key)">
+        <img ng-src="troops/{{cavtype.image}}.jpg"  ng-click="unitAttrSelected(key)">
+        <h2>{{cavtype.name}}</h2>
+        <div>Combat Value: {{cavtype.cr}}</div>
+        <div ng-if="cavtype.sk > 0">Can Skirmish</div>
+        <div ng-if="cavtype.dismount > 0">May Dismount</div>
+        <div ng-if="cavtype.lance > 0">Lance Bonus on 1st Round</div>
+        <div ng-if="cavtype.cossack > 0">Foraging Bonus</div>
+        <div>Scout Value: {{cavtype.scout}}</div>
+      </ion-item>
+    </ion-content>
+  </ion-list>
+</div>
+<div class="unittypepanel" ng-if="showCmdPanel && !isLoaded">
+  <ion-list>
+    <ion-item class="item-icon-right bar bar-dark" ng-click="closeUnitTypePanel()">
+      <b>Select Commander Type</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-content class="list" scroll="true">
+      <ion-item ng-repeat="(key,cmdtype) in lookup.cmd" ng-class="getChooserClass(key)">
+        <img ng-src="troops/{{cmdtype.image}}.jpg"  ng-click="unitAttrSelected(key)">
+        <h2>{{cmdtype.name}}</h2>
+      </ion-item>
+    </ion-content>
+  </ion-list>
+</div>
+<div class="unittypepanel" ng-if="showGunPanel && !isLoaded">
+  <ion-list>
+    <ion-item class="item-icon-right bar bar-dark" ng-click="closeUnitTypePanel()">
+      <b>Select Gun Type</b>
+      <i class="icon ion-ios-close-empty"></i>
+    </ion-item>
+    <ion-content class="list" scroll="true">
+      <ion-item ng-repeat="(key,guntype) in lookup.gun" ng-class="getChooserClass(key)">
+        <img ng-src="troops/{{guntype.image}}.jpg"  ng-click="unitAttrSelected(key)">
+        <h2>{{guntype.name}} - {{guntype.desc}}</h2>
+        <div>Shot Weight ... {{guntype.calibre}}lb</div>
+        <div>Mobility ... {{lookup.gw[guntype.weight]}}</div>
+        <h2>Ranges :</h2>
+        <div>Cannister ... {{guntype.rc}} Grids</div>
+        <div>RoundShot ... {{guntype.rs}} Grids</div>
+        <div>Roll Shot ... {{guntype.rr}} Grids</div>
+      </ion-item>
+    </ion-content>
+  </ion-list>
+</div>
+
+<ion-view hide-back-button="false" title="Kriegsspiel 1828 - Map / Scenario Editor" hide-nav-bar="true">
+
+  <ion-tabs class="tabs-icon-top tabs-dark" delegate-handle="map">
+
+    <!-- Loader Tab -->
+    <ion-tab title="Quit" icon="ion-ios-undo-outline" on-select="backBtn(1)" on-deselect="backBtn(2)">
+      <div class="loader">
+        <ion-spinner icon="bubbles" class="map-spinner spinner-positive"></ion-spinner>
+      </div>
+    </ion-tab>
+
+    <ion-tab title="Save" icon="ion-ios-upload-outline" on-select="saveMap()">
+    </ion-tab>
+
+    <!-- Map Editor Tab -->
+    <ion-tab title="Edit Map" icon-on="ion-ios-world" icon-off="ion-ios-world-outline" on-select="onEditMap()">
+      <ion-content padding="false" scroll="false" data-tap-disabled="true">
+        <leaflet center="center.mapCenter" markers="markers" paths="paths" layers="layers" maxbounds="maxbounds"></leaflet>
+      </ion-content>
+    </ion-tab>
+
+    <!-- Unit Roster Tab -->
+    <ion-tab title="Unit Roster" icon-on="ion-ios-paper" icon-off="ion-ios-paper-outline" on-select="onRoster()">
+      <ion-content padding="false">
+        <h2>Player List</h2>
+
+        <div class="list" ng-if="scenario.units[army.name].length > 0" ng-repeat="army in armies">
+          <!-- Bar header for the whole colour -->
+          <ion-item class="item bar bar-{{army.class}} item-icon-left">
+            <i class="icon ion-ios-flag-outline"></i>
+            {{army.name}}
+          </ion-item>
+
+          <!-- line item per player within that color -->
+          <ion-item class="gallery item item-avatar-left item-input-inset item-avatar-right" ng-repeat="hq in getHQList(army.name)">
+            <label class="item-input">
+              <img ng-src="icons/{{hq.color}}HQ.png">
+              <input type="text" ng-model="hq.label.message">
+            </label>            
+            <span ng-repeat="corps in getCorpsList(hq.color,hq.id)">
+              <img ng-src="icons/{{corps.color}}Corps.png" ng-click="roster('Corps',corps)">
+              <input type="text" ng-model="corps.label.message">
+            </span>
+          </ion-item>
+
+        </div>
+
+      </ion-content>
+    </ion-tab>
+
+    <!-- Corps Roster Tab .. $scope.unit = the selected Corps -->
+    <ion-tab>
+      <ion-content padding="false">
+        <div class="list">
+          <ion-item class="item item-icon-left {{barClass()}} item-icon-right">
+            <i class="icon ion-ios-flag-outline"></i>
+            {{unit.color}}
+            <i class="icon ion-ios-close-empty" ng-click="roster('HQ',unit)"></i>
+          </ion-item>
+          <ion-item class="item-input item-thumbnail">
+            <label ng-click="roster('HQ',unit)">
+              <img ng-src="icons/{{unit.color}}Corps.png">
+            </label>
+            <input type="text" placeholder="Unit Name" ng-model="unit.label.message">
+            <img ng-src="flags/{{lookup.getFlag(unit.nation)}}.jpg">
+          </ion-item>
+          <ion-item class="item-input range range-positive">
+            <i class="icon ion-ios-star-outline"></i>
+            <input type="range" name="skill" ng-model="unit.skill" min="1" max="11" value="5">
+            <i class="icon ion-ios-star"></i>
+          </ion-item>
+          <ion-item>
+            {{getRatingDesc(unit.skill)}}
+          </ion-item>
+
+          <ion-item class="item-input range range-positive">
+            <i class="icon ion-ios-bolt-outline"></i>
+            <input type="range" name="vigour" ng-model="unit.vigour" min="0" max="100" value="50">
+            <i class="icon ion-ios-bolt"></i>
+          </ion-item>
+          <ion-item class="item-input range range-positive">
+            <i class="icon ion-ios-lightbulb-outline"></i>
+            <input type="range" name="initiative" ng-model="unit.initiative" min="0" max="100" value="50">
+            <i class="icon ion-ios-lightbulb"></i>
+          </ion-item>
+          <ion-item class="item-input range range-positive">
+            <i class="icon ion-ios-paper-outline"></i>
+            <input type="range" name="logistics" ng-model="unit.logistics" min="0" max="100" value="50">
+            <i class="icon ion-ios-paper"></i>
+          </ion-item>
+          </ion-item>
+
+          <!-- line item per subunit for this Corps -->
+          <ion-item class="gallery item item-input item-avatar-right">
+            <span ng-repeat="subunit in getSubunitList(unit.color,unit.id)">
+              <img ng-src="{{subunit.icon.iconUrl}}" ng-click="roster(unit.color,subunit,id)">
+              <input type="text" ng-model="subunit.label.message">
+            </span>
+          </ion-item>
+
+        </div>
+
+      </ion-content>
+    </ion-tab>
+
+    <!-- Subunit Tab -->
+    <ion-tab>
+        <div class="list">
+          <ion-item class="item item-icon-left {{barClass()}} item-icon-right">
+            <i class="icon ion-ios-flag-outline"></i>
+            {{unit.color}} {{markers[unit.parent].name}}
+            <div class="buttons">
+              <button class="button button-icon ion-ios-arrow-back" 
+                      ng-click="">Prev</button>
+              <button class="button button-icon ion-ios-arrow-forward" 
+                      ng-click="">Next</button>
+            </div>
+            <i class="icon ion-ios-close-empty" ng-click="roster('Corps',markers[unit.parent])"></i>
+          </ion-item>
+          <ion-item class="item-input item-thumbnail">
+            <label ng-click="roster('Corps',markers[unit.parent])">
+              <img ng-src="icons/{{unit.color}}Div.png">
+            </label>
+            <input type="text" placeholder="Unit Name" ng-model="unit.label.message">
+            <img ng-src="flags/{{lookup.getFlag(unit.nation)}}.jpg" ng-click="data.showUnitHeader = !data.showUnitHeader">
+          </ion-item>
+
+          <!-- Make this section toggleable -->
+          <ion-item ng-if="data.showUnitHeader">
+            <ion-item class="item-input range range-positive">
+              <i class="icon ion-ios-star-outline"></i>
+              <input type="range" name="skill" ng-model="unit.skill" min="1" max="11" value="5">
+              <i class="icon ion-ios-star"></i>
+            </ion-item>
+            <ion-item>
+              {{getRatingDesc(unit.skill)}}
+            </ion-item>
+            <ion-item class="item-input range range-positive" ng-if="unit.lvl == 'Div' || unit.lvl == 'Bde'">
+              <i class="icon ion-ios-bolt-outline"></i>
+              <input type="range" name="vigour" ng-model="unit.vigour" min="0" max="100" value="50">
+              <i class="icon ion-ios-bolt"></i>
+            </ion-item>
+            <ion-item class="item-input range range-positive" ng-if="unit.lvl == 'Cav'">
+              <i class="icon ion-ios-lightbulb-outline"></i>
+              <input type="range" name="initiative" ng-model="unit.initiative" min="0" max="100" value="50">
+              <i class="icon ion-ios-lightbulb"></i>
+            </ion-item>
+            <ion-item class="item-input range range-positive" ng-if="unit.lvl == 'Gun'">
+              <i class="icon ion-ios-paper-outline"></i>
+              <input type="range" name="logistics" ng-model="unit.logistics" min="0" max="100" value="50">
+              <i class="icon ion-ios-paper"></i>
+            </ion-item>
+          </ion-item>
+          <!-- end toggleable section -->
+
+          <!-- line item per subunit for this Corps -->
+
+          <ion-item class="{{barClass()}}">
+            <div class="buttons">
+              <button class="button button-icon ion-ios-minus-outline" ng-click="data.showReorder = false; data.showDelete = !data.showDelete">
+              </button>
+            </div>
+            <h2 class="title" ng-click="scrollSubsToTop()">Units</h2>
+            <div class="buttons">
+              <button class="button button-icon ion-ios-star-outline" 
+                      ng-click="addSubUnit(unit,'X')"></button>
+              <button class="button" ng-click="addSubUnit(unit,'I')">+Infantry</button>
+              <button class="button" ng-click="addSubUnit(unit,'C')">+Cavalry</button>
+              <button class="button" ng-click="addSubUnit(unit,'A')">+Artillery</button>
+
+              <button class="button" ng-click="data.showDelete = false; data.showReorder = !data.showReorder">Reorder</button> 
+            </div>
+          </ion-item>
+          <ion-content class="list has-header" scroll="true" delegate-handle="subUnitScroll">
+            <ion-list show-delete="data.showDelete"> 
+              <ion-item ng-repeat="subunit in unit.sub" class="item-input" ng-class="subUnitClass(subunit,$index)">
+                <ion-delete-button class="ion-minus-circled" ng-click="delSubUnit(unit,$index)"></ion-delete-button>
+                <img ng-src="{{subUnitAvatar(subunit)}}" ng-click="adjustUnitAttr(unit,subunit,$index)">                  
+                <input type="text" ng-model="subunit.Name">
+                <div>{{describeSubUnit(subunit,false)}}</div>
+                <div ng-if="!data.showReorder">{{describeSubUnit(subunit,true)}}</div>
+                <div class="buttons" ng-if="!data.showReorder && subunit.Type != 'X'">
+                  <button class="button button-icon ion-ios-minus-outline" ng-click="adjustUnitSize(subunit,-1,$index)"></button>
+                  <button class="button button-icon ion-ios-plus-outline" ng-click="adjustUnitSize(subunit,1,$index)"></button>
+                  <button class="button button-icon ion-ios-arrow-back" ng-click="adjustUnitRating(subunit,-1,$index)"></button>
+                  <button class="button button-icon ion-ios-arrow-forward" ng-click="adjustUnitRating(subunit,1,$index)"></button>
+                </div>
+                <div class="buttons" ng-if="data.showReorder">
+                  <button ng-if="$index < (unit.sub.length-1) && subunit.Type != 'X'" class="button button-icon ion-arrow-down-a" 
+                          ng-click="unitToNextBde(unit,subunit,$index)"></button>
+                  <button ng-if="$index > 0 && subunit.Type != 'X'" class="button button-icon ion-arrow-up-a" 
+                          ng-click="unitToPrevBde(unit,subunit,$index,-1)"></button>
+                  <button ng-if="$index < (unit.sub.length-1)" class="button button-icon ion-arrow-down-c" 
+                          ng-click="reorderUnit(unit,subunit,$index,1)"></button>
+                  <button ng-if="$index > 0" class="button button-icon ion-arrow-up-c" 
+                          ng-click="reorderUnit(unit,subunit,$index,-1)"></button>
+                  <button class="button button-icon ion-checkmark-circled" 
+                          ng-click="data.showReorder = false"
+                          ng-if="$index === subSelected"></button>
+
+                  <h2>Position {{$index+1}} of {{unit.sub.length}}</h2>
+                </div>
+              </ion-item>
+            </ion-list>
+          </ion-content>
+        </div>
+    </ion-tab>
+
+  </ion-tabs>
+</ion-view>

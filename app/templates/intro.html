@@ -1,0 +1,107 @@
+<ion-view title="Kriegspiel 1828">
+  <ion-nav-buttons side="left">
+    <button class="button button-positive button-clear no-animation"
+      ng-click="previous()" ng-if="slideIndex == 1">
+      Welcome Screen
+    </button>
+    <button class="button button-positive button-clear no-animation"
+      ng-click="previous()" ng-if="slideIndex == 2">
+      Login
+    </button>
+  </ion-nav-buttons>
+
+  <ion-nav-buttons side="right"> 
+    <button class="button button-positive button-clear no-animation"
+      ng-click="login()" ng-if="slideIndex == 0">
+      Login
+    </button>
+    <button class="button button-positive button-clear no-animation"
+      ng-click="account()" ng-if="slideIndex == 1">
+      Account Details
+    </button>
+  </ion-nav-buttons>
+
+  <ion-slide-box on-slide-changed="slideChanged(index)">
+    <ion-slide>   
+      <img src="images/kssplash3.jpg"><br>
+      <p>
+      Computer Moderated Campaign System
+      </p>
+      <p>
+      For Napoleonic Tabletop Miniatures Battles.
+      </p>
+      <a class="button icon-right ion-chevron-right button-positive" ng-click="login()">Login</a>
+    </ion-slide>
+
+    <ion-slide>
+      <list>
+          <div class="item item-divider">
+          Login Details
+          </div>
+          <label class="item item-input">
+            <span class="input-label">Email</span>
+            <input type="text" ng-model="user.email">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Password</span>
+            <input type="password" ng-model="user.password">
+          </label>    
+          <label>
+        <span class="assertive">{{error_condition}}</span>
+        </label>
+      </list>
+
+      <div class="padding">
+        <button class="button button-block button-positive" ng-click="logIn(user)">Sign In</button>
+        <button class="button button-block button-dark" ng-click="forgotPassword(user)" ng-if="failedPasswd">Forgot Password ?</button>
+      </div>    
+    </ion-slide>
+
+    <ion-slide>
+      <list>
+        <div class="item item-divider">
+          Your Account Details
+        </div>
+        <label class="item item-input">
+          <span class="input-label">Email</span>
+        <input type="text" ng-model="user.email">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Password</span>
+          <input type="password" ng-model="user.password">
+        </label>    
+        <div class="item item-divider">
+          Where abouts are you ?
+        </div>
+        <label class="item item-input">
+          <span class="input-label">Location</span>
+          <input type="text" ng-model="user.location">
+        </label>    
+        <div class="item item-divider">
+          Tell us about your model collection ...
+        </div>
+        <label class="item item-input">
+          <span class="input-label">What Armies</span>
+          <input type="text" ng-model="user.armies">
+        </label>    
+        <label class="item item-input">
+          <span class="input-label">Scales ?</span>
+          <input type="text" ng-model="user.scale">
+        </label>    
+        <div class="item item-divider">
+          When do you get to game ?
+        </div>
+        <label class="item item-input">
+          <span class="input-label">Game Time</span>
+          <input type="text" ng-model="user.gametime">
+        </label>    
+      </list>
+
+    <div class="padding">
+      <button class="button button-block button-positive" ng-click="register(user)">Register</button>
+    </div>
+
+    </ion-slide>
+  </ion-slide-box>
+
+</ion-view>

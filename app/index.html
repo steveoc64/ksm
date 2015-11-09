@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<!--    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, target-densitydpi=medium-dpi"> -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>"KSMapper"</title>
+
+    <!-- build:css styles/vendor.css -->
+    <!-- <link rel="stylesheet" href="vendor/some.contrib.css"> -->
+    <!-- <link href="//code.ionicframework.com/nightly/css/ionic.css" rel="stylesheet">    -->
+    <link href="lib/ionic/release/css/ionic.css" rel="stylesheet">    
+
+    <!-- bower:css -->
+    <link rel="stylesheet" href="lib/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <link rel="stylesheet" href="lib/Leaflet.label/dist/leaflet.label.css" />
+
+    <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+    <script src="//use.edgefonts.net/french-canon-small-caps;unifrakturmaguntia;unifrakturcook.js"></script> 
+  </head>
+
+  <body ng-app="KSMapper">
+
+
+    <ion-nav-bar class="bar-positive">
+      <ion-nav-back-button class="button-icon ion-arrow-left-c">
+      </ion-nav-back-button>
+    </ion-nav-bar>
+
+    <ion-nav-view></ion-nav-view>
+
+    <!-- build:js scripts/vendor.js -->
+    <!-- <script src="vendor/someContribJs.js"></script> -->
+    <!-- <script src="//code.ionicframework.com/nightly/js/ionic.bundle.js"></script> -->
+    <script src="lib/ionic/release/js/ionic.bundle.min.js"></script> 
+    <script src="lib/jquery/dist/jquery.min.js"></script> 
+
+    <!-- bower:js -->
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <script src="lib/leaflet/dist/leaflet.js"></script>
+    <script src="lib/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+    <script src="lib/Leaflet.label/dist/leaflet.label.js"></script>
+    <script src="lib/ngstorage/ngStorage.min.js"></script>
+    <script src="lib/angular-order-object-by/src/ng-order-object-by.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+
+        <!-- build:js scripts/scripts.js -->
+        <script src="scripts/config.js"></script>
+        <script src="scripts/app.js"></script>
+        <script src="scripts/services.js"></script>
+        <script src="scripts/controllers.js"></script>
+        <!-- endbuild -->
+
+</body>
+</html>

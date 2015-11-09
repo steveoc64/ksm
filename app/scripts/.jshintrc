@@ -1,0 +1,5 @@
+{
+"asi": true,
+"strict": false,
+"predef": ["angular","L","console","window","cordova","StatusBar"]
+}

@@ -1,0 +1,33 @@
+<ion-modal-view style="width:80%; height:60%; top: 15%; bottom: 25%; left:10%; right:10%">
+	<ion-header-bar class="bar-dark">
+		<h2 class="title">Add New Scenario</h2>
+	</ion-header-bar>
+	<ion-content>
+		<ion-list>
+		    <ion-item class="item-input item-select">
+		      <div class="input-label">Theatre</div>
+		      <select ng-model="file.period" ng-change="showSelect" ng-options="value.code as value.name+' .....  '+value.from+' - '+value.to for value in lookup.period | orderBy:'code'">        
+		      </select>
+		    </ion-item>
+		    <ion-item class="item-input">
+		      <input type="text" placeholder="Map Name" ng-model="file.name">
+		    </ion-item>
+		    <ion-item class="item-input">
+		      <input type="text" placeholder="Year" ng-model="file.year">
+		    </ion-item>
+		</ion-list>
+		<div class="button-bar">
+			<ion-radio ng-repeat="season in seasons"
+					   ng-value="season.name"
+					   ng-change="seasonChanged(season)"
+					   ng-checked="season.selected"
+					   ng-model="file.season">
+				<img ng-src="{{season.image}}"><br>
+				{{season.name}}
+			</ion-radio>
+		</div>
+		<button class="button button-full button-positive" ng-click="closeCreateModal()">Create</button>
+      {{errorMsg}}
+
+	</ion-content>
+</ion-modal-view>

@@ -1,0 +1,24 @@
+<ion-modal-view>
+	<ion-header-bar class="bar-dark">
+		Add New Player HQ
+	</ion-header-bar>
+	<ion-content>
+		<ion-list>
+			<ion-item class="item-input">
+			  <input type="text" placeholder="Player Name" ng-model="addedHQ.label.message">
+			</ion-item>
+			<ion-item class="{{barClass()}}">
+				Select a Nationality for this player :
+			</ion-item>
+			<ion-item>
+			</ion-item>
+		</ion-list>
+		<a ng-repeat="force in lookup.forces"
+		   class="item item-thumbnail-right" 
+		   ng-click="closeHQModal(force.Nation)">
+		   {{force.Nation}}
+		   <img src="flags/{{lookup.getFlag(force.Nation)}}.jpg">
+		</a>
+	</ion-content>
+</ion-modal-view>
+

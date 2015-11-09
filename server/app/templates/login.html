@@ -1,0 +1,102 @@
+<ion-view title="view title here" hide-nav-bar="true">
+<ion-tabs class="tabs-icon-top tabs-dark has-header" delegate-handle="welcome">
+  <ion-tab icon-on="ion-ios-flower" icon-off="ion-ios-flower-outline" title="title 1">
+  <!-- <ion-view title="Welcome to Kriegsspiel" animation="slide-left-right"> -->
+    <!-- <ion-content class="padding center"> -->
+    <center>
+      <img src="images/welcome.jpg"><br>
+      <p>
+      Computer Moderated Campaign System
+      </p>
+      <p>
+      For Napoleonic Tabletop Miniatures Battles.
+      </p>
+      <a class="button icon-right ion-chevron-right button-balanced" ng-click="login()">Login</a>
+    </center>
+    <!-- </ion-content> -->
+  <!-- </ion-view> -->
+  </ion-tab>
+
+  <ion-tab icon-on="ion-ios-person" icon-off="ion-ios-person-outline" title="Login">
+<!--  <ion-view title="Login" animation="slide-left-right"> -->
+    <ion-content class="padding">
+      <ion-list>
+        <ion-item class="item-divider">
+        Login Details
+        </ion-item>
+        <label class="item item-input">
+          <span class="input-label">Email</span>
+          <input type="text" ng-model="user.email">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Password</span>
+          <input type="password" ng-model="user.password">
+        </label>    
+        <label>
+          <span class="assertive">{{error_condition}}</span>
+        </label>
+      </ion-list>
+
+      <div class="padding">
+        <button class="button button-block button-positive" ng-click="logIn(user)">Sign In</button>
+        <button class="button button-block button-dark" ng-click="forgotPassword(user)" ng-if="failedPasswd">Forgot Password ?</button>
+      </div>    
+    </ion-content>
+<!-- </ion-view> -->
+  </ion-tab>
+
+  <ion-tab icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline" title="Register">
+<!--  <ion-view title="Register New Account" animation="slide-left-right"> -->
+    <ion-content class="padding">
+      <ion-list>
+        <ion-item class="item-divider">
+          <h1>Your Account Details</h1>
+        </ion-item>
+        <ion-item class="item-input">
+          <span class="input-label">Username</span>
+          <input type="text" ng-model="user.username">
+        </ion-item>
+        <ion-item class="item-input">
+          <span class="input-label">Email</span>
+          <span>{{user.email}}</span>
+        </ion-item>
+        <ion-item class="item-input">
+          <span class="input-label">Password</span>
+          <input type="password" ng-model="user.password">
+        </ion-item>
+        <ion-item class="item-divider">
+          Where abouts are you ?
+        </ion-item>
+        <ion-item class="item-input">
+          <span class="input-label">Location</span>
+          <input type="text" ng-model="user.location">
+        </ion-item>
+        <ion-item class="item-divider">
+          Tell us about your model collection ...
+        </ion-item>
+        <ion-item class="item-input">
+          <span class="input-label">What Armies</span>
+          <input type="text" ng-model="user.armies">
+        </ion-item>
+        <ion-item class="item-input">
+          <span class="input-label">Scales ?</span>
+          <input type="text" ng-model="user.scale">
+        </ion-item>
+        <ion-item class="item-divider">
+          When do you get to game ?
+        </ion-item>
+        <ion-item class="item-input">
+          <span class="input-label">Game Time</span>
+          <input type="text" ng-model="user.gametime">
+        </ion-item>
+      </ion-list>
+
+      <div class="padding">
+        <button class="button button-block button-positive" ng-click="register(user)">Register</button>
+      </div>
+    </ion-content>
+
+<!--  </ion-view> -->
+  </ion-tab>
+</ion-tabs>
+</ion-view>
